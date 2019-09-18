@@ -2,7 +2,7 @@
 
 > fork from [svelte-vscode](https://github.com/UnwrittenFun/svelte-vscode.git)
 
-Provides syntax highlighting and rich intellisense for Svelte components in (neo)vim, utilising the [svelte language server](https://github.com/UnwrittenFun/svelte-language-server).
+Provides rich intellisense for Svelte components in (neo)vim, utilising the [svelte language server](https://github.com/UnwrittenFun/svelte-language-server).
 
 ## Install
 
@@ -49,10 +49,6 @@ this they will run in the context of coc.nvim, meaning v8 version mismatch is li
 #### `svelte.plugin.html.autoClosingTags`
 
 auto close tag for html template
-
-#### Other
-
-Check out the settings editor in vs code to configure / disable any feature provided.
 
 ### Recommend syntax highlight plugin
 
