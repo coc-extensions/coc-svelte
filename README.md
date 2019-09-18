@@ -50,10 +50,6 @@ this they will run in the context of coc.nvim, meaning v8 version mismatch is li
 
 auto close tag for html template
 
-#### Other
-
-Check out the settings editor in vs code to configure / disable any feature provided.
-
 ### Recommend syntax highlight plugin
 
 [evanleck/vim-svelte](https://github.com/evanleck/vim-svelte)
