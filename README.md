@@ -44,6 +44,7 @@ utilising the [svelte language server](https://github.com/UnwrittenFun/svelte-la
 #### Language specific setup
 
 -   [SCSS](docs/preprocessors/scss.md)
+-   [TypeScript](docs/preprocessors/typescript.md)
 
 #### Generic setup
 
