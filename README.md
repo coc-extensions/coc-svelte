@@ -41,6 +41,12 @@ utilising the [svelte language server](https://github.com/UnwrittenFun/svelte-la
 
 ### Using with preprocessors
 
+#### Language specific setup
+
+-   [SCSS](docs/preprocessors/scss.md)
+
+#### Generic setup
+
 If a svelte file contains some language other than `html`, `css` or `javascript`,
 `svelte-vscode` needs to know how to [preprocess](https://svelte.dev/docs#svelte_preprocess) it.
 This can be achieved by creating a `svelte.config.js` file at the root of your project
