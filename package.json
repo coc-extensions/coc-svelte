@@ -4,7 +4,7 @@
   "description": "Svelte language support for coc.nvim",
   "main": "out/index.js",
   "scripts": {
-    "build": "rm -rf ./out && tsc -p ./",
+    "build": "rm -rf ./node_modules/coc.nvim/node_modules/vscode-languageserver-protocol/node_modules/vscode-languageserver-types/ && rm -rf ./out && tsc -p ./",
     "watch": "tsc -w -p ./"
   },
   "repository": {
