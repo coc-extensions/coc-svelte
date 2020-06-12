@@ -90,4 +90,4 @@ typings/
 .dynamodb/
 
 # Node-patch:
-out/
+lib/

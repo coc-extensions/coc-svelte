@@ -1,4 +1,6 @@
-# SCSS Support
+# SCSS/Less Support
+
+The following document talks about SCSS, but the same applies for Less.
 
 ## Syntax Highlighting
 
@@ -35,7 +37,7 @@ _Tip: To avoid duplication of config, you can import the `svelte.config.js` file
 
 ### Example Configurations
 
-#### Using [svelte-preprocess](https://github.com/kaisermann/svelte-preprocess) by [@kaisermann](https://github.com/kaisermann)
+#### Using [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess)
 
 ##### Install
 
@@ -56,6 +58,7 @@ yarn add --dev svelte-preprocess node-sass
 
 ```js
 const sveltePreprocess = require('svelte-preprocess');
+
 module.exports = {
     preprocess: sveltePreprocess(),
 };
@@ -65,4 +68,8 @@ module.exports = {
 
 You will need to tell coc-svelte to restart the svelte language server in order to pick up the new configuration.
 
-Using `:CocList commands` and type `svelte restart`, and select `Svelte: Restart Language Server`. Any errors you were seeing should now go away and you're now all set up!
+Run the command `:CocCommand svelte.restartLanguageServer`. Any errors you were seeing should now go away and you're now all set up!
+
+## SCSS: Still having errors?
+
+The `node-sass` package is very sensitive to node versions. It may be possible that this plugin runs on a different version than your application. Then it is necessary to set the `svelte.language-server.runtime` setting to the path of your node runtime.
