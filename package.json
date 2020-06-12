@@ -24,7 +24,7 @@
     },
     "homepage": "https://github.com/coc-extensions/coc-svelte#readme",
     "engines": {
-        "coc": "^0.0.79"
+        "coc": "^0.0.77"
     },
     "activationEvents": [
         "onLanguage:svelte",
