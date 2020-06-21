@@ -1,9 +1,8 @@
 # Svelte for (Neo)Vim
 
-> fork from [svelte-vscode](https://github.com/UnwrittenFun/svelte-vscode.git)
+> fork from [svelte-vscode](https://github.com/sveltejs/language-tools/tree/master/packages/svelte-vscode).
 
-Provides rich intellisense for Svelte components in (neo)vim,
-utilising the [svelte language server](https://github.com/UnwrittenFun/svelte-language-server).
+Provides syntax highlighting and rich intellisense for Svelte components in (neo)vim, utilising the [svelte language server](https://github.com/sveltejs/language-tools/tree/master/packages/language-server).
 
 ## Install
 
@@ -11,12 +10,18 @@ utilising the [svelte language server](https://github.com/UnwrittenFun/svelte-la
 :CocInstall coc-svelte
 ```
 
+## Setup
+
+Do you want to use Typescript/SCSS/Less/..? See "Using with preprocessors" below.
+
+If you added `"files.associations": {"*.svelte": "html" }` to your CoC settings, remove it.
+
 ## Features
 
 -   Svelte
     -   Diagnostic messages for warnings and errors
     -   Support for svelte preprocessors that provide source maps
-    -   Svelte specific formatting (via [prettier-plugin-svelte](https://github.com/UnwrittenFun/prettier-plugin-svelte))
+    -   Svelte specific formatting (via [prettier-plugin-svelte](https://github.com/sveltejs/prettier-plugin-svelte))
 -   HTML
     -   Hover info
     -   Autocompletions
@@ -43,27 +48,24 @@ utilising the [svelte language server](https://github.com/UnwrittenFun/svelte-la
 
 #### Language specific setup
 
--   [SCSS](docs/preprocessors/scss.md)
--   [TypeScript](docs/preprocessors/typescript.md)
+-   [SCSS/Less](/docs/preprocessors/scss.md)
+-   [TypeScript](/docs/preprocessors/typescript.md)
 
 #### Generic setup
 
-If a svelte file contains some language other than `html`, `css` or `javascript`,
-`svelte-vscode` needs to know how to [preprocess](https://svelte.dev/docs#svelte_preprocess) it.
-This can be achieved by creating a `svelte.config.js` file at the root of your project
-which exports a svelte options object (similar to `svelte-loader` and `rollup-plugin-svelte`).
+If a svelte file contains some language other than `html`, `css` or `javascript`, `svelte-vscode` needs to know how to [preprocess](https://svelte.dev/docs#svelte_preprocess) it. This can be achieved by creating a `svelte.config.js` file at the root of your project which exports a svelte options object (similar to `svelte-loader` and `rollup-plugin-svelte`). It's recommended to use the official [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) package which can handle many languages.
 
 ```js
 // svelte.config.js
-const preprocess = require('my-example-svelte-preprocessor');
+const sveltePreprocess = require('svelte-preprocess');
+
 module.exports = {
-    preprocess: [preprocess()],
+    preprocess: sveltePreprocess(),
     // ...other svelte options
 };
 ```
 
-It's also necessary to add a `type="text/language-name"` or `lang="language-name"` to
-your `style` and `script` tags, which defines how that code should be interpreted by the extension.
+It's also necessary to add a `type="text/language-name"` or `lang="language-name"` to your `style` and `script` tags, which defines how that code should be interpreted by the extension.
 
 ```html
 <div>
@@ -85,7 +87,15 @@ your `style` and `script` tags, which defines how that code should be interprete
 
 Path to the node executable you would like to use to run the language server.
 This is useful when you depend on native modules such as node-sass as without
-this they will run in the context of coc.nvim, meaning v8 version mismatch is likely.
+this they will run in the context of vscode, meaning v8 version mismatch is likely.
+
+##### `svelte.language-server.port`
+
+At which port to spawn the language server.
+Can be used for attaching to the process for debugging / profiling.
+If you experience crashes due to "port already in use", try setting the port.
+-1 = default port is used.
+
 
 ##### `svelte.plugin.typescript.enable`
 
@@ -147,10 +157,6 @@ Enable document symbols for CSS. _Default_: `true`
 
 Enable the HTML plugin. _Default_: `true`
 
-##### `svelte.plugin.html.autoClosingTags`
-
-Auto close tag for html template. _Default_: `true`
-
 ##### `svelte.plugin.html.hover`
 
 Enable hover info for HTML. _Default_: `true`
@@ -179,6 +185,10 @@ Enable diagnostic messages for Svelte. _Default_: `true`
 
 Enable formatting for Svelte (includes css & js). _Default_: `true`
 
-### Recommend syntax highlight plugin
+##### `svelte.plugin.svelte.hover.enable`
 
-[evanleck/vim-svelte](https://github.com/evanleck/vim-svelte)
+Enable hover info for Svelte (for tags like #if/#each). _Default_: `true`
+
+##### `svelte.plugin.svelte.completions.enable`
+
+Enable autocompletion for Svelte (for tags like #if/#each). _Default_: `true`
