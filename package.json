@@ -1,6 +1,6 @@
 {
     "name": "coc-svelte",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Svelte language support for coc.nim",
     "main": "lib/src/extension.js",
     "scripts": {
@@ -204,14 +204,16 @@
             }
         ]
     },
+    "dependencies": {
+        "svelte-language-server": "^0.10.44",
+        "vscode-languageserver-protocol": "^3.16.0-next.2"
+    },
     "devDependencies": {
         "@tsconfig/node12": "^1.0.0",
         "@types/node": "^14.0.1",
         "coc.nvim": "^0.0.77",
         "npm-run-all": "^4.1.5",
-        "rimraf": "^3.0.2",
-        "svelte-language-server": "^0.10.44",
-        "typescript": "*",
-        "vscode-languageserver-protocol": "^3.16.0-next.2"
+        "typescript": "^3.9.5",
+        "rimraf": "^3.0.2"
     }
 }
