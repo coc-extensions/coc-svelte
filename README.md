@@ -2,13 +2,15 @@
 
 > fork from [svelte-vscode](https://github.com/sveltejs/language-tools/tree/master/packages/svelte-vscode).
 
-Provides syntax highlighting and rich intellisense for Svelte components in (neo)vim, utilising the [svelte language server](https://github.com/sveltejs/language-tools/tree/master/packages/language-server).
+Provides rich intellisense for Svelte components in (neo)vim, utilising the [svelte language server](https://github.com/sveltejs/language-tools/tree/master/packages/language-server).
 
 ## Install
 
 ``` vim
 :CocInstall coc-svelte
 ```
+
+> You have to install syntax plugin to get syntax highlight and get right filetype, for example `leafOfTree/vim-svelte-plugin`
 
 ## Setup
 
