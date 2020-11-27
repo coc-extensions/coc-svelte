@@ -14,9 +14,9 @@ Provides rich intellisense for Svelte components in (neo)vim, utilising the [sve
 
 ## Setup
 
-Do you want to use Typescript/SCSS/Less/..? See "Using with preprocessors" below.
-
 If you added `"files.associations": {"*.svelte": "html" }` to your CoC settings, remove it.
+
+Do you want to use TypeScript/SCSS/Less/..? [See the docs](/docs/README.md#language-specific-setup).
 
 ## Features
 
@@ -46,58 +46,24 @@ If you added `"files.associations": {"*.svelte": "html" }` to your CoC settings,
     -   Go to definition
     -   Code Actions
 
-### Using with preprocessors
-
-#### Language specific setup
-
--   [SCSS/Less](/docs/preprocessors/scss.md)
--   [TypeScript](/docs/preprocessors/typescript.md)
-
-#### Generic setup
-
-If a svelte file contains some language other than `html`, `css` or `javascript`, `svelte-vscode` needs to know how to [preprocess](https://svelte.dev/docs#svelte_preprocess) it. This can be achieved by creating a `svelte.config.js` file at the root of your project which exports a svelte options object (similar to `svelte-loader` and `rollup-plugin-svelte`). It's recommended to use the official [svelte-preprocess](https://github.com/sveltejs/svelte-preprocess) package which can handle many languages.
-
-```js
-// svelte.config.js
-const sveltePreprocess = require('svelte-preprocess');
-
-module.exports = {
-    preprocess: sveltePreprocess(),
-    // ...other svelte options
-};
-```
-
-It's also necessary to add a `type="text/language-name"` or `lang="language-name"` to your `style` and `script` tags, which defines how that code should be interpreted by the extension.
-
-```html
-<div>
-    <h1>Hello, world!</h1>
-</div>
-
-<style type="text/scss">
-    div {
-        h1 {
-            color: red;
-        }
-    }
-</style>
-```
-
 ### Settings
 
 ##### `svelte.language-server.runtime`
 
 Path to the node executable you would like to use to run the language server.
 This is useful when you depend on native modules such as node-sass as without
-this they will run in the context of vscode, meaning v8 version mismatch is likely.
+this they will run in the context of vscode, meaning node version mismatch is likely.
+
+##### `svelte.language-server.ls-path`
+
+You normally don't set this. Path to the language server executable. If you installed the \"svelte-language-server\" npm package, it's within there at \"bin/server.js\". Path can be either relative to your workspace root or absolute. Set this only if you want to use a custom version of the language server.
 
 ##### `svelte.language-server.port`
 
-At which port to spawn the language server.
+You normally don't set this. At which port to spawn the language server.
 Can be used for attaching to the process for debugging / profiling.
 If you experience crashes due to "port already in use", try setting the port.
 -1 = default port is used.
-
 
 ##### `svelte.plugin.typescript.enable`
 
@@ -119,6 +85,10 @@ Enable document symbols for TypeScript. _Default_: `true`
 
 Enable completions for TypeScript. _Default_: `true`
 
+##### `svelte.plugin.typescript.findReferences`
+
+Enable find-references for TypeScript. _Default_: `true`
+
 ##### `svelte.plugin.typescript.definitions`
 
 Enable go to definition for TypeScript. _Default_: `true`
@@ -127,9 +97,25 @@ Enable go to definition for TypeScript. _Default_: `true`
 
 Enable code actions for TypeScript. _Default_: `true`
 
+##### `svelte.plugin.typescript.selectionRange`
+
+Enable selection range for TypeScript. _Default_: `true`
+
+##### `svelte.plugin.typescript.rename.enable`
+
+Enable rename/move Svelte files functionality. _Default_: `true`
+
+##### `svelte.plugin.typescript.signatureHelp.enable`
+
+Enable signature help (parameter hints) for JS/TS. _Default_: `true`
+
 ##### `svelte.plugin.css.enable`
 
 Enable the CSS plugin. _Default_: `true`
+
+##### `svelte.plugin.css.globals`
+
+Which css files should be checked for global variables (`--global-var: value;`). These variables are added to the css completions. String of comma-separated file paths or globs relative to workspace root.
 
 ##### `svelte.plugin.css.diagnostics`
 
@@ -154,6 +140,10 @@ Enable color picker for CSS. _Default_: `true`
 ##### `svelte.plugin.css.documentSymbols`
 
 Enable document symbols for CSS. _Default_: `true`
+
+##### `svelte.plugin.css.selectionRange`
+
+Enable selection range for CSS. _Default_: `true`
 
 ##### `svelte.plugin.html.enable`
 
@@ -183,6 +173,10 @@ Enable the Svelte plugin. _Default_: `true`
 
 Enable diagnostic messages for Svelte. _Default_: `true`
 
+##### `svelte.plugin.svelte.compilerWarnings`
+
+Svelte compiler warning codes to ignore or to treat as errors. Example: { 'css-unused-selector': 'ignore', 'unused-export-let': 'error'}
+
 ##### `svelte.plugin.svelte.format.enable`
 
 Enable formatting for Svelte (includes css & js). _Default_: `true`
@@ -194,3 +188,20 @@ Enable hover info for Svelte (for tags like #if/#each). _Default_: `true`
 ##### `svelte.plugin.svelte.completions.enable`
 
 Enable autocompletion for Svelte (for tags like #if/#each). _Default_: `true`
+
+##### `svelte.plugin.svelte.codeActions.enable`
+
+Enable code actions for Svelte. _Default_: `true`
+
+##### `svelte.plugin.svelte.selectionRange.enable`
+
+Enable selection range for Svelte. _Default_: `true`
+
+
+### Usage with Yarn 2 PnP
+
+1. Run `yarn add -D svelte-language-server` to install svelte-language-server as a dev dependency 
+2. Run `yarn dlx @yarnpkg/pnpify --sdk vim` to generate or update the (neo)vim/Yarn integration SDKs. This also sets the `svelte.language-server.ls-path` setting for the workspace, pointing it to the workspace-installed language server.
+3. Restart (neo)vim.
+4. Commit the changes to `.yarn/sdks`
+
