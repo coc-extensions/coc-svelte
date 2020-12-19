@@ -6,15 +6,28 @@ import {
     ServerOptions,
     TransportKind,
     RevealOutputChannelOn,
+    Uri,
     commands,
 } from 'coc.nvim';
+import path from "path";
 import { TextDocument, Position, TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import { activateTagClosing } from './html/autoClose';
 
 export function activate(context: ExtensionContext) {
-    const serverModule = require.resolve('svelte-language-server/bin/server.js');
-
     const runtimeConfig = workspace.getConfiguration('svelte.language-server');
+
+    const { workspaceFolders } = workspace;
+    const rootPath = Array.isArray(workspaceFolders) ? Uri.parse(workspaceFolders[0].uri).fsPath : undefined;
+
+    const tempLsPath = runtimeConfig.get<string>('ls-path');
+    const lsPath =
+        tempLsPath && tempLsPath.trim() !== ''
+            ? path.isAbsolute(tempLsPath)
+                ? tempLsPath
+                : path.join(rootPath as string, tempLsPath)
+            : undefined;
+
+    const serverModule = require.resolve(lsPath || 'svelte-language-server/bin/server.js');
 
     const runExecArgv: string[] = [];
     let port = runtimeConfig.get<number>('port') ?? -1;
