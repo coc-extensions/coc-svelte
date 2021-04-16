@@ -70,7 +70,7 @@ Note though that this will _NOT_ make the events strict so that you get type err
 
 ### I cannot use TS inside my script even when `lang="ts"` is present
 
-Make sure to follow the [setup instructions](/packages/svelte-vscode#setup)
+Make sure to follow the [setup instructions](#setup)
 
 ### How do I type reactive assignments? / I get an "implicitly has type 'any' error"
 
