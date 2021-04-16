@@ -46,14 +46,6 @@ Do you want to use TypeScript/SCSS/Less/..? [See the docs](/docs/README.md#langu
     -   Go to definition
     -   Code Actions
 
-##### `svelte.trace.server`
-
-Traces the communication between VS Code and the Svelte Language Server. _Default_: `off`
-
-Value can be `off`, `messages`, or `verbose`.
-You normally don't set this. Can be used in debugging language server features.
-If enabled you can see the logging in the output channel near the integrated terminal.
-
 ##### `svelte.plugin.XXX`
 
 Settings to toggle specific features of the extension. The full list of all settings [is here](https://github.com/sveltejs/language-tools/blob/master/packages/language-server/README.md#List-of-settings).
