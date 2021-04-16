@@ -7,7 +7,8 @@
         "outDir": "lib",
         "sourceMap": true,
         "composite": true,
-        "esModuleInterop": true // Handles coc type errors
+        "esModuleInterop": true, // Handles coc type errors
+        "skipLibCheck": true // consider unsetting in the future
     },
     "include": ["src"]
 }

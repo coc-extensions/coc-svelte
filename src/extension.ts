@@ -1,16 +1,18 @@
 import {
+    window,
     workspace,
     ExtensionContext,
     LanguageClient,
     LanguageClientOptions,
     ServerOptions,
     TransportKind,
+    TextDocument,
     RevealOutputChannelOn,
     Uri,
     commands,
 } from 'coc.nvim';
 import path from "path";
-import { TextDocument, Position, TextDocumentPositionParams } from 'vscode-languageserver-protocol';
+import { Position, TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import { activateTagClosing } from './html/autoClose';
 
 export function activate(context: ExtensionContext) {
@@ -84,7 +86,7 @@ export function activate(context: ExtensionContext) {
             'html.autoClosingTags',
         );
         context.subscriptions.push(disposable);
-        workspace.showMessage('Svelte language server now active.');
+        window.showMessage('Svelte language server now active.');
     });
 
     context.subscriptions.push(
@@ -98,7 +100,7 @@ export function activate(context: ExtensionContext) {
         context.subscriptions.push(ls.start());
         await ls.onReady();
         if (showNotification) {
-            workspace.showMessage('Svelte language server restarted.');
+            window.showMessage('Svelte language server restarted.');
         }
     }
 }
