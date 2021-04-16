@@ -46,162 +46,22 @@ Do you want to use TypeScript/SCSS/Less/..? [See the docs](/docs/README.md#langu
     -   Go to definition
     -   Code Actions
 
-### Settings
+##### `svelte.trace.server`
 
-##### `svelte.language-server.runtime`
+Traces the communication between VS Code and the Svelte Language Server. _Default_: `off`
 
-Path to the node executable you would like to use to run the language server.
-This is useful when you depend on native modules such as node-sass as without
-this they will run in the context of vscode, meaning node version mismatch is likely.
+Value can be `off`, `messages`, or `verbose`.
+You normally don't set this. Can be used in debugging language server features.
+If enabled you can see the logging in the output channel near the integrated terminal.
 
-##### `svelte.language-server.ls-path`
+##### `svelte.plugin.XXX`
 
-You normally don't set this. Path to the language server executable. If you installed the \"svelte-language-server\" npm package, it's within there at \"bin/server.js\". Path can be either relative to your workspace root or absolute. Set this only if you want to use a custom version of the language server.
-
-##### `svelte.language-server.port`
-
-You normally don't set this. At which port to spawn the language server.
-Can be used for attaching to the process for debugging / profiling.
-If you experience crashes due to "port already in use", try setting the port.
--1 = default port is used.
-
-##### `svelte.plugin.typescript.enable`
-
-Enable the TypeScript plugin. _Default_: `true`
-
-##### `svelte.plugin.typescript.diagnostics`
-
-Enable diagnostic messages for TypeScript. _Default_: `true`
-
-##### `svelte.plugin.typescript.hover`
-
-Enable hover info for TypeScript. _Default_: `true`
-
-##### `svelte.plugin.typescript.documentSymbols`
-
-Enable document symbols for TypeScript. _Default_: `true`
-
-##### `svelte.plugin.typescript.completions`
-
-Enable completions for TypeScript. _Default_: `true`
-
-##### `svelte.plugin.typescript.findReferences`
-
-Enable find-references for TypeScript. _Default_: `true`
-
-##### `svelte.plugin.typescript.definitions`
-
-Enable go to definition for TypeScript. _Default_: `true`
-
-##### `svelte.plugin.typescript.codeActions`
-
-Enable code actions for TypeScript. _Default_: `true`
-
-##### `svelte.plugin.typescript.selectionRange`
-
-Enable selection range for TypeScript. _Default_: `true`
-
-##### `svelte.plugin.typescript.rename.enable`
-
-Enable rename/move Svelte files functionality. _Default_: `true`
-
-##### `svelte.plugin.typescript.signatureHelp.enable`
-
-Enable signature help (parameter hints) for JS/TS. _Default_: `true`
-
-##### `svelte.plugin.css.enable`
-
-Enable the CSS plugin. _Default_: `true`
-
-##### `svelte.plugin.css.globals`
-
-Which css files should be checked for global variables (`--global-var: value;`). These variables are added to the css completions. String of comma-separated file paths or globs relative to workspace root.
-
-##### `svelte.plugin.css.diagnostics`
-
-Enable diagnostic messages for CSS. _Default_: `true`
-
-##### `svelte.plugin.css.hover`
-
-Enable hover info for CSS. _Default_: `true`
-
-##### `svelte.plugin.css.completions`
-
-Enable auto completions for CSS. _Default_: `true`
-
-##### `svelte.plugin.css.documentColors`
-
-Enable document colors for CSS. _Default_: `true`
-
-##### `svelte.plugin.css.colorPresentations`
-
-Enable color picker for CSS. _Default_: `true`
-
-##### `svelte.plugin.css.documentSymbols`
-
-Enable document symbols for CSS. _Default_: `true`
-
-##### `svelte.plugin.css.selectionRange`
-
-Enable selection range for CSS. _Default_: `true`
-
-##### `svelte.plugin.html.enable`
-
-Enable the HTML plugin. _Default_: `true`
-
-##### `svelte.plugin.html.hover`
-
-Enable hover info for HTML. _Default_: `true`
-
-##### `svelte.plugin.html.completions`
-
-Enable auto completions for HTML. _Default_: `true`
-
-##### `svelte.plugin.html.tagComplete`
-
-Enable HTML tag auto closing. _Default_: `true`
-
-##### `svelte.plugin.html.documentSymbols`
-
-Enable document symbols for HTML. _Default_: `true`
-
-##### `svelte.plugin.svelte.enable`
-
-Enable the Svelte plugin. _Default_: `true`
-
-##### `svelte.plugin.svelte.diagnostics.enable`
-
-Enable diagnostic messages for Svelte. _Default_: `true`
-
-##### `svelte.plugin.svelte.compilerWarnings`
-
-Svelte compiler warning codes to ignore or to treat as errors. Example: { 'css-unused-selector': 'ignore', 'unused-export-let': 'error'}
-
-##### `svelte.plugin.svelte.format.enable`
-
-Enable formatting for Svelte (includes css & js). _Default_: `true`
-
-##### `svelte.plugin.svelte.hover.enable`
-
-Enable hover info for Svelte (for tags like #if/#each). _Default_: `true`
-
-##### `svelte.plugin.svelte.completions.enable`
-
-Enable autocompletion for Svelte (for tags like #if/#each). _Default_: `true`
-
-##### `svelte.plugin.svelte.codeActions.enable`
-
-Enable code actions for Svelte. _Default_: `true`
-
-##### `svelte.plugin.svelte.selectionRange.enable`
-
-Enable selection range for Svelte. _Default_: `true`
-
+Settings to toggle specific features of the extension. The full list of all settings [is here](https://github.com/sveltejs/language-tools/blob/master/packages/language-server/README.md#List-of-settings).
 
 ### Usage with Yarn 2 PnP
 
-1. Run `yarn add -D svelte-language-server` to install svelte-language-server as a dev dependency 
-2. Run `yarn dlx @yarnpkg/pnpify --sdk vim` to generate or update the (neo)vim/Yarn integration SDKs. This also sets the `svelte.language-server.ls-path` setting for the workspace, pointing it to the workspace-installed language server.
-3. Restart (neo)vim.
-4. Commit the changes to `.yarn/sdks`
-
+1. Run `yarn add -D svelte-language-server` to install svelte-language-server as a dev dependency
+2. Run `yarn dlx @yarnpkg/pnpify --sdk vscode` to generate or update the VSCode/Yarn integration SDKs.
+3. Set the `svelte.language-server.ls-path` setting in your user configuration, pointing it to the workspace-installed language server.
+4. Restart VSCode.
+5. Commit the changes to `.yarn/sdks`

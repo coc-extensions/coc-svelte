@@ -36,14 +36,16 @@
             "title": "Svelte",
             "properties": {
                 "svelte.language-server.runtime": {
+                    "scope": "application",
                     "type": "string",
                     "title": "Language Server Runtime",
-                    "description": "- You normally don't need this - Path to the node executable to use to spawn the language server. This is useful when you depend on native modules such as node-sass as without this they will run in the context of coc, meaning node version mismatch is likely."
+                    "description": "- You normally don't need this - Path to the node executable to use to spawn the language server. This is useful when you depend on native modules such as node-sass as without this they will run in the context of vscode, meaning node version mismatch is likely. Minimum required node version is 12.17. This setting can only be changed in user settings for security reasons."
                 },
                 "svelte.language-server.ls-path": {
+                    "scope": "application",
                     "type": "string",
                     "title": "Language Server Path",
-                    "description": "- You normally don't set this - Path to the language server executable. If you installed the \"svelte-language-server\" npm package, it's within there at \"bin/server.js\". Path can be either relative to your workspace root or absolute. Set this only if you want to use a custom version of the language server."
+                    "description": "- You normally don't set this - Path to the language server executable. If you installed the \"svelte-language-server\" npm package, it's within there at \"bin/server.js\". Path can be either relative to your workspace root or absolute. Set this only if you want to use a custom version of the language server. This setting can only be changed in user settings for security reasons."
                 },
                 "svelte.language-server.port": {
                     "type": "number",
@@ -230,7 +232,49 @@
                     "type": "boolean",
                     "default": true,
                     "title": "Svelte: Format",
-                    "description": "Enable formatting for Svelte (includes css & js)"
+                    "description": "Enable formatting for Svelte (includes css & js). You can set some formatting options through this extension. They will be ignored if there's any kind of configuration file, for example a `.prettierrc` file."
+                },
+                "svelte.plugin.svelte.format.config.svelteSortOrder": {
+                    "type": "string",
+                    "default": "options-scripts-markup-styles",
+                    "title": "Svelte Format: Sort Order",
+                    "description": "Format: join the keys `options`, `scripts`, `markup`, `styles` with a - in the order you want. This option is ignored if there's any kind of configuration file, for example a `.prettierrc` file."
+                },
+                "svelte.plugin.svelte.format.config.svelteStrictMode": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "Svelte Format: Strict Mode",
+                    "description": "More strict HTML syntax. This option is ignored if there's any kind of configuration file, for example a `.prettierrc` file."
+                },
+                "svelte.plugin.svelte.format.config.svelteAllowShorthand": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Svelte Format: Allow Shorthand",
+                    "description": "Option to enable/disable component attribute shorthand if attribute name and expression are the same. This option is ignored if there's any kind of configuration file, for example a `.prettierrc` file."
+                },
+                "svelte.plugin.svelte.format.config.svelteBracketNewLine": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Svelte Format: Bracket New Line",
+                    "description": "Put the `>` of a multiline element on a new line. This option is ignored if there's any kind of configuration file, for example a `.prettierrc` file."
+                },
+                "svelte.plugin.svelte.format.config.svelteIndentScriptAndStyle": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Svelte Format: Indent Script And Style",
+                    "description": "Whether or not to indent code inside `<script>` and `<style>` tags. This option is ignored if there's any kind of configuration file, for example a `.prettierrc` file."
+                },
+                "svelte.plugin.svelte.format.config.printWidth": {
+                    "type": "number",
+                    "default": 80,
+                    "title": "Svelte Format: Print Width",
+                    "description": "Maximum line width after which code is tried to be broken up. This is a Prettier core option. If you have the Prettier extension installed, this option is ignored and the corresponding option of that extension is used instead. This option is also ignored if there's any kind of configuration file, for example a `.prettierrc` file."
+                },
+                "svelte.plugin.svelte.format.config.singleQuote": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "Svelte Format: Quotes",
+                    "description": "Use single quotes instead of double quotes, where possible. This is a Prettier core option. If you have the Prettier extension installed, this option is ignored and the corresponding option of that extension is used instead. This option is also ignored if there's any kind of configuration file, for example a `.prettierrc` file."
                 },
                 "svelte.plugin.svelte.completions.enable": {
                     "type": "boolean",
@@ -264,6 +308,16 @@
                 }
             }
         },
+        "jsonValidation": [
+          {
+            "fileMatch": ".prettierrc",
+            "url": "./prettier-options-schema.json"
+          },
+          {
+            "fileMatch": ".prettierrc.json",
+            "url": "./prettier-options-schema.json"
+          }
+        ],
         "commands": [
             {
                 "command": "svelte.restartLanguageServer",
