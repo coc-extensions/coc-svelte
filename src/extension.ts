@@ -1,16 +1,18 @@
 import {
+    window,
     workspace,
     ExtensionContext,
     LanguageClient,
     LanguageClientOptions,
     ServerOptions,
     TransportKind,
+    TextDocument,
     RevealOutputChannelOn,
     Uri,
     commands,
 } from 'coc.nvim';
 import path from "path";
-import { TextDocument, Position, TextDocumentPositionParams } from 'vscode-languageserver-protocol';
+import { Position, TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import { activateTagClosing } from './html/autoClose';
 
 export function activate(context: ExtensionContext) {
@@ -29,7 +31,9 @@ export function activate(context: ExtensionContext) {
 
     const serverModule = require.resolve(lsPath || 'svelte-language-server/bin/server.js');
 
-    const runExecArgv: string[] = [];
+    // Add --experimental-modules flag for people using node 12 < version < 12.17
+    // Remove this in mid 2022
+    const runExecArgv: string[] = ['--experimental-modules'];
     let port = runtimeConfig.get<number>('port') ?? -1;
     if (port < 0) {
         port = 6009;
@@ -37,7 +41,7 @@ export function activate(context: ExtensionContext) {
         console.log('setting port to', port);
         runExecArgv.push(`--inspect=${port}`);
     }
-    const debugOptions = { execArgv: ['--nolazy', `--inspect=${port}`] };
+    const debugOptions = { execArgv: ['--nolazy', '--experimental-modules', `--inspect=${port}`] };
 
     const serverOptions: ServerOptions = {
         run: {
@@ -59,7 +63,7 @@ export function activate(context: ExtensionContext) {
         documentSelector: [{ scheme: 'file', language: 'svelte' }],
         revealOutputChannelOn: RevealOutputChannelOn.Never,
         synchronize: {
-            configurationSection: ['svelte'],
+            configurationSection: ['svelte', 'javascript', 'typescript', 'prettier'],
             fileEvents: workspace.createFileSystemWatcher('{**/*.js,**/*.ts}', false, false, false),
         },
         initializationOptions: { config: workspace.getConfiguration('svelte.plugin') },
@@ -82,18 +86,23 @@ export function activate(context: ExtensionContext) {
             'html.autoClosingTags',
         );
         context.subscriptions.push(disposable);
-        workspace.showMessage('Svelte language server now active.');
+        window.showMessage('Svelte language server now active.');
     });
 
     context.subscriptions.push(
         commands.registerCommand('svelte.restartLanguageServer', async () => {
-            await ls.stop();
-            ls = createLanguageServer(serverOptions, clientOptions);
-            context.subscriptions.push(ls.start());
-            await ls.onReady();
-            workspace.showMessage('Svelte language server restarted.');
+            await restartLS(true);
         }),
     );
+    async function restartLS(showNotification: boolean) {
+        await ls.stop();
+        ls = createLanguageServer(serverOptions, clientOptions);
+        context.subscriptions.push(ls.start());
+        await ls.onReady();
+        if (showNotification) {
+            window.showMessage('Svelte language server restarted.');
+        }
+    }
 }
 
 function createLanguageServer(serverOptions: ServerOptions, clientOptions: LanguageClientOptions) {
