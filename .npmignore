@@ -1,3 +1,4 @@
 src/
+!lib/**/*
 tsconfig.json
 yarn.lock
