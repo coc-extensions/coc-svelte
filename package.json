@@ -332,7 +332,7 @@
     },
     "dependencies": {
         "lodash": "^4.17.19",
-        "svelte-language-server": "^0.13.0",
+        "svelte-language-server": "^0.14.3",
         "typescript": "^4.2.4",
         "vscode-languageserver-protocol": "^3.15.3"
     },
