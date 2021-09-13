@@ -31,6 +31,12 @@
         "onCommand:svelte.restartLanguageServer"
     ],
     "contributes": {
+        "typescriptServerPlugins-disabled": [
+            {
+                "name": "typescript-svelte-plugin",
+                "enableForWorkspaceTypeScriptVersions": true
+            }
+        ],
         "configuration": {
             "type": "object",
             "title": "Svelte",

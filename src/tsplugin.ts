@@ -52,7 +52,7 @@ export class TsPlugin {
             }
         } catch (err) {
             window.showWarningMessage(
-                'Coc-svelte package.json update failed, TypeScript plugin could not be toggled.',
+                'coc-svelte package.json update failed, TypeScript plugin could not be toggled.',
             );
         }
     }
@@ -82,7 +82,7 @@ export class TsPlugin {
 
         const answers = ['Ask again later', "Don't show this message again", 'Enable Plugin'];
         const response = await window.showInformationMessage(
-            'The Svelte for coc-svelte extension now contains a TypeScript plugin. ' +
+            'The coc-svelte extension now contains a TypeScript plugin. ' +
                 'Enabling it will provide intellisense for Svelte files from TS/JS files. ' +
                 'Would you like to enable it? ' +
                 'You can always enable/disable it later on through the extension settings.',
