@@ -35,6 +35,18 @@
             "type": "object",
             "title": "Svelte",
             "properties": {
+                "svelte.enable-ts-plugin": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "Enable TypeScript Svelte plugin",
+                    "description": "Enable semantic tokens (semantic highlight) for TypeScript."
+                },
+                "svelte.ask-to-enable-ts-plugin": {
+                    "type": "boolean",
+                    "default": true,
+                    "title": "Ask to enable TypeScript Svelte plugin",
+                    "description": "Ask on startup to enable the TypeScript plugin."
+                },
                 "svelte.language-server.runtime": {
                     "scope": "application",
                     "type": "string",
@@ -331,14 +343,15 @@
         ]
     },
     "dependencies": {
-        "lodash": "^4.17.19",
-        "svelte-language-server": "^0.14.4",
-        "typescript": "^4.2.4",
+        "lodash": "^4.17.21",
+        "svelte-language-server": "^0.14.8",
+        "typescript": "^4.4.3",
+        "typescript-svelte-plugin": "^0.2.4",
         "vscode-languageserver-protocol": "^3.15.3"
     },
     "devDependencies": {
         "@tsconfig/node12": "^1.0.0",
-        "@types/lodash": "^4.14.116",
+        "@types/lodash": "^4.14.172",
         "@types/node": "^14.0.1",
         "coc.nvim": "^0.0.80",
         "js-yaml": "^3.14.0",

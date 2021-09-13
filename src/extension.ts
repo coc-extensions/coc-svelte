@@ -11,15 +11,18 @@ import {
     Uri,
     commands,
 } from 'coc.nvim';
-import path from "path";
+import path from 'path';
 import { Position, TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import { activateTagClosing } from './html/autoClose';
+import { TsPlugin } from './tsplugin';
 
 export function activate(context: ExtensionContext) {
     const runtimeConfig = workspace.getConfiguration('svelte.language-server');
 
     const { workspaceFolders } = workspace;
-    const rootPath = Array.isArray(workspaceFolders) ? Uri.parse(workspaceFolders[0].uri).fsPath : undefined;
+    const rootPath = Array.isArray(workspaceFolders)
+        ? Uri.parse(workspaceFolders[0].uri).fsPath
+        : undefined;
 
     const tempLsPath = runtimeConfig.get<string>('ls-path');
     const lsPath =
@@ -103,6 +106,7 @@ export function activate(context: ExtensionContext) {
             window.showMessage('Svelte language server restarted.');
         }
     }
+    TsPlugin.create(context);
 }
 
 function createLanguageServer(serverOptions: ServerOptions, clientOptions: LanguageClientOptions) {
