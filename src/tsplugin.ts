@@ -13,8 +13,8 @@ export class TsPlugin {
     private constructor(context: ExtensionContext) {
         this.enabled = this.getEnabledState();
         this.askToEnable(this.enabled);
-        this.toggleTsPlugin(this.enabled);
         this.context = context;
+        this.toggleTsPlugin(this.enabled);
 
         context.subscriptions.push(
             workspace.onDidChangeConfiguration(() => {
