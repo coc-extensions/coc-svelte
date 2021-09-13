@@ -48,23 +48,23 @@ export class TsPlugin {
                 writeFileSync(packageJson, newText, 'utf8');
                 this.showReload(false);
             } else if (!packageText.includes(enabled) && !packageText.includes(disabled)) {
-                window.showWarningMessage('Unknown Svelte for VS Code package.json status.');
+                window.showWarningMessage('Unknown coc-svelte package.json status.');
             }
         } catch (err) {
             window.showWarningMessage(
-                'Svelte for VS Code package.json update failed, TypeScript plugin could not be toggled.',
+                'Coc-svelte package.json update failed, TypeScript plugin could not be toggled.',
             );
         }
     }
 
     private async showReload(enabled: boolean) {
-        // Restarting the TSServer via a command isn't enough, the whole VS Code window needs to reload
+        // Restarting the TSServer via a command isn't enough, the whole coc-svelte window needs to reload
         let message = `TypeScript Svelte Plugin ${enabled ? 'enabled' : 'disabled'}.`;
         if (enabled) {
             message +=
                 ' Note that changes of Svelte files are only noticed by TS/JS files after they are saved to disk.';
         }
-        message += ' Please reload VS Code to restart the TS Server.';
+        message += ' Please reload coc-svelte to restart the TS Server.';
 
         const reload = await window.showInformationMessage(message, 'Reload Window');
         if (reload) {
@@ -82,7 +82,7 @@ export class TsPlugin {
 
         const answers = ['Ask again later', "Don't show this message again", 'Enable Plugin'];
         const response = await window.showInformationMessage(
-            'The Svelte for VS Code extension now contains a TypeScript plugin. ' +
+            'The Svelte for coc-svelte extension now contains a TypeScript plugin. ' +
                 'Enabling it will provide intellisense for Svelte files from TS/JS files. ' +
                 'Would you like to enable it? ' +
                 'You can always enable/disable it later on through the extension settings.',
