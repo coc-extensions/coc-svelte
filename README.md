@@ -18,6 +18,8 @@ If you added `"files.associations": {"*.svelte": "html" }` to your CoC settings,
 
 Do you want to use TypeScript/SCSS/Less/..? [See the docs](/docs/README.md#language-specific-setup).
 
+To ensure you get correct line endings when auto importing/organizing imports, set the following line in your CoC settings: `"svelte.files.eol": "EOL"`, where EOL is either `\n` (unix line endings), or `\r\n` (for carriage return line endings).
+
 ## Features
 
 -   Svelte
