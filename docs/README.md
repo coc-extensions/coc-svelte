@@ -47,6 +47,13 @@ LSP-compatible editors, you can use an HTML comment with the `@component` tag:
 
 ### Using TypeScript? See [this section](./preprocessors/typescript.md#troubleshooting--faq)
 
+If using TypeScript with SvelteKit, to add syntax highlighting to `<script lang="ts">` blocks, add the following to your `init.vim`.
+
+```
+let g:vim_svelte_plugin_load_full_syntax = 1
+let g:vim_svelte_plugin_use_typescript = 1
+```
+
 ### Using SCSS or Less? See [this section](./preprocessors/scss-less.md#troubleshooting--faq)
 
 #### If I update a TS/JS file, Svelte does not seem to recognize it
