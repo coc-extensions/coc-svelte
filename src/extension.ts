@@ -111,7 +111,7 @@ export function activate(context: ExtensionContext) {
         return ls;
     }
 
-    addDidChangeTextDocumentListener(getLS);
+    context.subscriptions.push(addDidChangeTextDocumentListener(getLS));
 
     TsPlugin.create(context);
 }
@@ -120,7 +120,7 @@ function addDidChangeTextDocumentListener(getLS: () => LanguageClient) {
     // Only Svelte file changes are automatically notified through the inbuilt LSP
     // because the extension says it's only responsible for Svelte files.
     // Therefore we need to set this up for TS/JS files manually.
-    workspace.onDidChangeTextDocument((evt) => {
+    return workspace.onDidChangeTextDocument((evt) => {
         if (evt.textDocument.uri.endsWith('.ts') || evt.textDocument.uri.endsWith('.js')) {
             getLS().sendNotification('$/onDidChangeTsOrJsFile', {
                 uri: evt.textDocument.uri,
