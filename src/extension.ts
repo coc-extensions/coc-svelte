@@ -77,6 +77,13 @@ export function activate(context: ExtensionContext) {
 
     ls.onReady().then(() => {
         const tagRequestor = (document: TextDocument, position: Position) => {
+            if (!['svelte', 'html'].includes(document.uri.split('.').at(-1))) {
+                //console.log(
+                //    'tagRequestor rejected on no svelte file!',
+                //    document.uri.split('.').at(-1),
+                //);
+                return;
+            }
             const param: TextDocumentPositionParams = {
                 textDocument: { uri: document.uri },
                 position,
