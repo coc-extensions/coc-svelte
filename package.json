@@ -350,18 +350,18 @@
     },
     "dependencies": {
         "lodash": "^4.17.21",
-        "svelte-language-server": "^0.14.37",
-        "typescript": "^4.8.4",
-        "typescript-svelte-plugin": "^0.3.10",
-        "vscode-languageserver-protocol": "^3.17.2"
+        "svelte-language-server": "^0.15.9",
+        "typescript": "^5.0.4",
+        "typescript-svelte-plugin": "^0.3.22",
+        "vscode-languageserver-protocol": "^3.17.3"
     },
     "devDependencies": {
         "@tsconfig/node12": "^1.0.11",
-        "@types/lodash": "^4.14.187",
-        "@types/node": "^18.11.9",
+        "@types/lodash": "^4.14.194",
+        "@types/node": "^18.15.11",
         "coc.nvim": "^0.0.82",
         "js-yaml": "^4.1.0",
         "npm-run-all": "^4.1.5",
-        "rimraf": "^3.0.2"
+        "rimraf": "^5.0.0"
     }
 }
