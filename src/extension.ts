@@ -1,6 +1,7 @@
 import {
     window,
     workspace,
+    services,
     ExtensionContext,
     LanguageClient,
     LanguageClientOptions,
@@ -14,9 +15,60 @@ import {
 import path from 'path';
 import { Position, TextDocumentPositionParams } from 'vscode-languageserver-protocol';
 import { activateTagClosing } from './html/autoClose';
+import { addFindComponentReferencesListener } from './typescript/findComponentReferences';
+import { addFindFileReferencesListener } from './typescript/findFileReferences';
 import { TsPlugin } from './tsplugin';
+import { setupSvelteKit } from './sveltekit';
+
+let lsApi: { getLS(): LanguageClient } | undefined;
 
 export function activate(context: ExtensionContext) {
+    // The extension is activated on TS/JS/Svelte files because else it might be too late to configure the TS plugin:
+    // If we only activate on Svelte file and the user opens a TS file first, the configuration command is issued too late.
+    // We wait until there's a Svelte file open and only then start the actual language client.
+    const tsPlugin = new TsPlugin(context);
+
+    if (workspace.textDocuments.some((doc) => doc.languageId === 'svelte')) {
+        lsApi = activateSvelteLanguageServer(context);
+        tsPlugin.askToEnable();
+    } else {
+        const onTextDocumentListener = workspace.onDidOpenTextDocument((doc) => {
+            if (doc.languageId === 'svelte') {
+                lsApi = activateSvelteLanguageServer(context);
+                tsPlugin.askToEnable();
+                onTextDocumentListener.dispose();
+            }
+        });
+
+        context.subscriptions.push(onTextDocumentListener);
+    }
+
+    setupSvelteKit(context);
+
+    // This API is considered private and only exposed for experimenting.
+    // Interface may change at any time. Use at your own risk!
+    return {
+        /**
+         * As a function, because restarting the server
+         * will result in another instance.
+         */
+        getLanguageServer() {
+            if (!lsApi) {
+                lsApi = activateSvelteLanguageServer(context);
+            }
+
+            return lsApi.getLS();
+        },
+    };
+}
+
+export function deactivate() {
+    const stop = lsApi?.getLS().stop();
+    lsApi = undefined;
+    return stop;
+}
+
+export function activateSvelteLanguageServer(context: ExtensionContext) {
     const runtimeConfig = workspace.getConfiguration('svelte.language-server');
 
     const { workspaceFolders } = workspace;
@@ -66,16 +118,24 @@ export function activate(context: ExtensionContext) {
         documentSelector: [{ scheme: 'file', language: 'svelte' }],
         revealOutputChannelOn: RevealOutputChannelOn.Never,
         synchronize: {
-            configurationSection: ['svelte', 'javascript', 'typescript', 'prettier'],
+            configurationSection: [
+                'svelte',
+                'javascript',
+                'typescript',
+                'prettier',
+                'css',
+                'less',
+                'scss',
+                'html',
+            ],
             fileEvents: workspace.createFileSystemWatcher('{**/*.js,**/*.ts}', false, false, false),
         },
         initializationOptions: { config: workspace.getConfiguration('svelte.plugin') },
     };
 
     let ls = createLanguageServer(serverOptions, clientOptions);
-    context.subscriptions.push(ls.start());
 
-    ls.onReady().then(() => {
+    ls.start().then(() => {
         const tagRequestor = (document: TextDocument, position: Position) => {
             const param: TextDocumentPositionParams = {
                 textDocument: { uri: document.uri },
@@ -89,7 +149,7 @@ export function activate(context: ExtensionContext) {
             'html.autoClosingTags',
         );
         context.subscriptions.push(disposable);
-        window.showMessage('Svelte language server now active.');
+        window.showInformationMessage('Svelte language server now active.');
     });
 
     context.subscriptions.push(
@@ -100,27 +160,31 @@ export function activate(context: ExtensionContext) {
     async function restartLS(showNotification: boolean) {
         await ls.stop();
         ls = createLanguageServer(serverOptions, clientOptions);
-        context.subscriptions.push(ls.start());
-        await ls.onReady();
-        if (showNotification) {
-            window.showMessage('Svelte language server restarted.');
-        }
+        context.subscriptions.push(services.registerLanguageClient(ls));
+        await ls.onReady().then(() => {
+            if (showNotification) {
+                window.showInformationMessage('Svelte language server restarted.');
+            }
+        });
     }
 
     function getLS() {
         return ls;
     }
 
-    context.subscriptions.push(addDidChangeTextDocumentListener(getLS));
-
-    TsPlugin.create(context);
+    addDidChangeTextDocumentListener(getLS, context);
+    addFindFileReferencesListener(getLS, context);
+    addFindComponentReferencesListener(getLS, context);
+    return {
+        getLS,
+    };
 }
 
-function addDidChangeTextDocumentListener(getLS: () => LanguageClient) {
+function addDidChangeTextDocumentListener(getLS: () => LanguageClient, context: ExtensionContext) {
     // Only Svelte file changes are automatically notified through the inbuilt LSP
     // because the extension says it's only responsible for Svelte files.
     // Therefore we need to set this up for TS/JS files manually.
-    return workspace.onDidChangeTextDocument((evt) => {
+    const disposable = workspace.onDidChangeTextDocument((evt) => {
         if (evt.textDocument.uri.endsWith('.ts') || evt.textDocument.uri.endsWith('.js')) {
             getLS().sendNotification('$/onDidChangeTsOrJsFile', {
                 uri: evt.textDocument.uri,
@@ -134,6 +198,7 @@ function addDidChangeTextDocumentListener(getLS: () => LanguageClient) {
             });
         }
     });
+    context.subscriptions.push(disposable);
 }
 
 function createLanguageServer(serverOptions: ServerOptions, clientOptions: LanguageClientOptions) {
