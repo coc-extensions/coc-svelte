@@ -25,13 +25,7 @@ export class TsPlugin {
     }
 
     private async toggleTsPlugin(enable: boolean) {
-        // This somewhat semi-public command configures our TypeScript plugin.
-        // The plugin itself is always present, but enabled/disabled depending on this config.
-        // It is done this way because it allows us to toggle the plugin without restarting VS Code
-        // and without having to do hacks like updating the extension's package.json.
-        commands.executeCommand('_typescript.configurePlugin', 'typescript-svelte-plugin', {
-            enable,
-        });
+        workspace.getConfiguration('svelte').update('enable-ts-plugin', enable, true);
     }
 
     async askToEnable() {
