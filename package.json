@@ -355,6 +355,50 @@
             {
                 "command": "svelte.restartLanguageServer",
                 "title": "Svelte: Restart Language Server"
+            },
+            {
+                "command": "svelte.typescript.findAllFileReferences",
+                "title": "Svelte: Find File References"
+            },
+            {
+                "command": "svelte.typescript.findComponentReferences",
+                "title": "Svelte: Find Component References"
+            },
+            {
+                "command": "svelte.kit.generateMultipleFiles",
+                "title": "SvelteKit: Create route"
+            },
+            {
+                "command": "svelte.kit.generatePage",
+                "title": "SvelteKit: Create +page.svelte"
+            },
+            {
+                "command": "svelte.kit.generatePageLoad",
+                "title": "SvelteKit: Create +page.js/ts"
+            },
+            {
+                "command": "svelte.kit.generatePageServerLoad",
+                "title": "SvelteKit: Create +page.server.js/ts"
+            },
+            {
+                "command": "svelte.kit.generateLayout",
+                "title": "SvelteKit: Create +layout.svelte"
+            },
+            {
+                "command": "svelte.kit.generateLayoutLoad",
+                "title": "SvelteKit: Create +layout.js/ts"
+            },
+            {
+                "command": "svelte.kit.generateLayoutServerLoad",
+                "title": "SvelteKit: Create +layout.server.js/ts"
+            },
+            {
+                "command": "svelte.kit.generateServer",
+                "title": "SvelteKit: Create +server.js/ts"
+            },
+            {
+                "command": "svelte.kit.generateError",
+                "title": "SvelteKit: Create +error.svelte"
             }
         ],
         "submenus": [
