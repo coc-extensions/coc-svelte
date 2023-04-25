@@ -17,20 +17,17 @@ export function setupSvelteKit(context: ExtensionContext) {
     async function enableContextMenu() {
         const config = getConfig();
         if (config === 'never') {
-            if (contextMenuEnabled) {
-                setEnableContext(false);
-            }
             return;
         }
 
         if (config === 'always') {
             // Force on. The condition is defined in the extension manifest
+            contextMenuEnabled = true
             return;
         }
 
         const enabled = await detect(20);
         if (enabled !== contextMenuEnabled) {
-            setEnableContext(enabled);
             contextMenuEnabled = enabled;
         }
     }
@@ -70,13 +67,4 @@ async function detect(nrRetries: number): Promise<boolean> {
     }
 
     return false;
-}
-
-function setEnableContext(enable: boolean) {
-    // https://code.visualstudio.com/api/references/when-clause-contexts#add-a-custom-when-clause-context
-    commands.executeCommand(
-        'setContext',
-        'svelte.uiContext.svelteKitFilesContextMenu.enable',
-        enable,
-    );
 }
