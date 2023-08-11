@@ -91,3 +91,4 @@ typings/
 
 # Node-patch:
 lib/
+.vim/

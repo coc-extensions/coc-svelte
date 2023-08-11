@@ -16,7 +16,8 @@ import { Position, TextDocumentPositionParams } from 'vscode-languageserver-prot
 import { activateTagClosing } from './html/autoClose';
 import { TsPlugin } from './tsplugin';
 
-export function activate(context: ExtensionContext) {
+let ls: LanguageClient;
+export const activate = async (context: ExtensionContext) => {
     const runtimeConfig = workspace.getConfiguration('svelte.language-server');
 
     const { workspaceFolders } = workspace;
@@ -72,8 +73,8 @@ export function activate(context: ExtensionContext) {
         initializationOptions: { config: workspace.getConfiguration('svelte.plugin') },
     };
 
-    let ls = createLanguageServer(serverOptions, clientOptions);
-    context.subscriptions.push(ls.start());
+    ls = createLanguageServer(serverOptions, clientOptions);
+    await ls.start();
 
     ls.onReady().then(() => {
         const tagRequestor = (document: TextDocument, position: Position) => {
@@ -89,7 +90,7 @@ export function activate(context: ExtensionContext) {
             'html.autoClosingTags',
         );
         context.subscriptions.push(disposable);
-        window.showMessage('Svelte language server now active.');
+        window.showInformationMessage('Svelte language server now active.');
     });
 
     context.subscriptions.push(
@@ -98,13 +99,12 @@ export function activate(context: ExtensionContext) {
         }),
     );
     async function restartLS(showNotification: boolean) {
-        await ls.stop();
-        ls = createLanguageServer(serverOptions, clientOptions);
-        context.subscriptions.push(ls.start());
-        await ls.onReady();
-        if (showNotification) {
-            window.showMessage('Svelte language server restarted.');
+        if (ls) {
+            await ls.stop();
         }
+        ls = createLanguageServer(serverOptions, clientOptions);
+        await ls.onReady();
+        if (showNotification) window.showInformationMessage('Svelte language server restarted.');
     }
 
     function getLS() {
@@ -114,7 +114,11 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(addDidChangeTextDocumentListener(getLS));
 
     TsPlugin.create(context);
-}
+};
+
+export const deactivate = async () => {
+    if (ls) await ls.stop();
+};
 
 function addDidChangeTextDocumentListener(getLS: () => LanguageClient) {
     // Only Svelte file changes are automatically notified through the inbuilt LSP
