@@ -1,6 +1,6 @@
-import { readFileSync, writeFileSync } from 'fs';
-import { join } from 'path';
 import { commands, ExtensionContext, window, workspace } from 'coc.nvim';
+import { readFileSync, writeFileSync } from 'fs';
+import * as path from 'path';
 
 export class TsPlugin {
     private enabled: boolean;
@@ -34,7 +34,7 @@ export class TsPlugin {
     private toggleTsPlugin(enable: boolean) {
         const extension = this.context;
 
-        const packageJson = join(extension.extensionPath, 'package.json');
+        const packageJson = path.join(extension.extensionPath, 'package.json');
         const enabled = '"typescriptServerPlugins"';
         const disabled = '"typescriptServerPlugins-disabled"';
         try {
