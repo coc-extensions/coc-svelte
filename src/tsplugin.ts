@@ -23,7 +23,7 @@ export class TsPlugin {
           this.enabled = enabled;
           this.toggleTsPlugin(this.enabled);
         }
-      }),
+      })
     );
   }
 
@@ -81,7 +81,7 @@ export class TsPlugin {
         "Enabling it will provide intellisense for Svelte files from TS/JS files. " +
         "Would you like to enable it? " +
         "You can always enable/disable it later on through the extension settings.",
-      ...answers,
+      ...answers
     );
 
     if (response === answers[2]) {
