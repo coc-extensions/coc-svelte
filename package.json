@@ -4,22 +4,29 @@
   "description": "Svelte language support for coc.nim",
   "main": "lib/index.js",
   "scripts": {
-    "build": "node esbuild"
+    "build": "node esbuild",
+    "prepare": "node esbuild"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/coc-extensions/coc-svelte.git"
+    "url": "https://github.com/kaiuri/coc-svelte.git"
   },
   "keywords": [
     "svelte",
     "coc.nvim"
   ],
+  "maintainers": [
+    {
+      "name": "kaiuri",
+      "email": "uriel.acioli@gmail.com"
+    }
+  ],
   "author": "iamcco <ooiss@qq.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/coc-extensions/coc-svelte/issues"
+    "url": "https://github.com/kaiuri/coc-svelte/issues"
   },
-  "homepage": "https://github.com/coc-extensions/coc-svelte#readme",
+  "homepage": "https://github.com/kaiuri/coc-svelte#readme",
   "engines": {
     "coc": "^0.0.82"
   },
@@ -239,7 +246,7 @@
               "error"
             ]
           },
-          "default": { },
+          "default": {},
           "title": "Svelte: Compiler Warnings Settings",
           "description": "Svelte compiler warning codes to ignore or to treat as errors. Example: { 'css-unused-selector': 'ignore', 'unused-export-let': 'error'}"
         },
@@ -349,7 +356,8 @@
     "svelte-language-server": "^0.15.17",
     "typescript": "^4.9.5",
     "typescript-svelte-plugin": "^0.2.5",
-    "vscode-languageserver-protocol": "^3.17.3"
+    "vscode-languageserver-protocol": "^3.17.3",
+    "vscode-languageserver-textdocument": "^1.0.8"
   },
   "devDependencies": {
     "@tsconfig/node12": "^1.0.11",
