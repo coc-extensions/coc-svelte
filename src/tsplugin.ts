@@ -1,98 +1,93 @@
-import { commands, ExtensionContext, window, workspace } from 'coc.nvim';
-import { readFileSync, writeFileSync } from 'fs';
-import * as path from 'path';
+import { commands, ExtensionContext, window, workspace } from "coc.nvim";
+import { readFileSync, writeFileSync } from "fs";
+import * as path from "path";
 
 export class TsPlugin {
-    private enabled: boolean;
-    private context: ExtensionContext;
+  private enabled: boolean;
+  private context: ExtensionContext;
 
-    static create(context: ExtensionContext) {
-        new TsPlugin(context);
-    }
+  static create(context: ExtensionContext) {
+    new TsPlugin(context);
+  }
 
-    private constructor(context: ExtensionContext) {
-        this.enabled = this.getEnabledState();
-        this.askToEnable(this.enabled);
-        this.context = context;
-        this.toggleTsPlugin(this.enabled);
+  private constructor(context: ExtensionContext) {
+    this.enabled = this.getEnabledState();
+    this.askToEnable(this.enabled);
+    this.context = context;
+    this.toggleTsPlugin(this.enabled);
 
-        context.subscriptions.push(
-            workspace.onDidChangeConfiguration(() => {
-                const enabled = this.getEnabledState();
-                if (enabled !== this.enabled) {
-                    this.enabled = enabled;
-                    this.toggleTsPlugin(this.enabled);
-                }
-            }),
-        );
-    }
-
-    private getEnabledState(): boolean {
-        return workspace.getConfiguration('svelte').get<boolean>('enable-ts-plugin') ?? false;
-    }
-
-    private toggleTsPlugin(enable: boolean) {
-        const extension = this.context;
-
-        const packageJson = path.join(extension.extensionPath, 'package.json');
-        const enabled = '"typescriptServerPlugins"';
-        const disabled = '"typescriptServerPlugins-disabled"';
-        try {
-            const packageText = readFileSync(packageJson, 'utf8');
-            if (packageText.includes(disabled) && enable) {
-                const newText = packageText.replace(disabled, enabled);
-                writeFileSync(packageJson, newText, 'utf8');
-                this.showReload(true);
-            } else if (packageText.includes(enabled) && !enable) {
-                const newText = packageText.replace(enabled, disabled);
-                writeFileSync(packageJson, newText, 'utf8');
-                this.showReload(false);
-            } else if (!packageText.includes(enabled) && !packageText.includes(disabled)) {
-                window.showWarningMessage('Unknown coc-svelte package.json status.');
-            }
-        } catch (err) {
-            window.showWarningMessage(
-                'coc-svelte package.json update failed, TypeScript plugin could not be toggled.',
-            );
+    context.subscriptions.push(
+      workspace.onDidChangeConfiguration(() => {
+        const enabled = this.getEnabledState();
+        if (enabled !== this.enabled) {
+          this.enabled = enabled;
+          this.toggleTsPlugin(this.enabled);
         }
+      }),
+    );
+  }
+
+  private getEnabledState(): boolean {
+    return workspace.getConfiguration("svelte").get<boolean>("enable-ts-plugin") ?? false;
+  }
+
+  private toggleTsPlugin(enable: boolean) {
+    const extension = this.context;
+
+    const packageJson = path.join(extension.extensionPath, "package.json");
+    const enabled = '"typescriptServerPlugins"';
+    const disabled = '"typescriptServerPlugins-disabled"';
+    try {
+      const packageText = readFileSync(packageJson, "utf8");
+      if (packageText.includes(disabled) && enable) {
+        const newText = packageText.replace(disabled, enabled);
+        writeFileSync(packageJson, newText, "utf8");
+        this.showReload(true);
+      } else if (packageText.includes(enabled) && !enable) {
+        const newText = packageText.replace(enabled, disabled);
+        writeFileSync(packageJson, newText, "utf8");
+        this.showReload(false);
+      } else if (!packageText.includes(enabled) && !packageText.includes(disabled)) {
+        window.showWarningMessage("Unknown coc-svelte package.json status.");
+      }
+    } catch (err) {
+      window.showWarningMessage("coc-svelte package.json update failed, TypeScript plugin could not be toggled.");
+    }
+  }
+
+  private async showReload(enabled: boolean) {
+    // Restarting the TSServer via a command isn't enough, the whole coc-svelte window needs to reload
+    let message = `TypeScript Svelte Plugin ${enabled ? "enabled" : "disabled"}.`;
+    if (enabled) {
+      message += " Note that changes of Svelte files are only noticed by TS/JS files after they are saved to disk.";
+    }
+    message += " Please reload coc-svelte to restart the TS Server.";
+
+    const reload = await window.showInformationMessage(message, "Reload Window");
+    if (reload) {
+      commands.executeCommand("workbench.action.reloadWindow");
+    }
+  }
+
+  private async askToEnable(enabled: boolean) {
+    const shouldAsk = workspace.getConfiguration("svelte").get<boolean>("ask-to-enable-ts-plugin");
+    if (enabled || !shouldAsk) {
+      return;
     }
 
-    private async showReload(enabled: boolean) {
-        // Restarting the TSServer via a command isn't enough, the whole coc-svelte window needs to reload
-        let message = `TypeScript Svelte Plugin ${enabled ? 'enabled' : 'disabled'}.`;
-        if (enabled) {
-            message +=
-                ' Note that changes of Svelte files are only noticed by TS/JS files after they are saved to disk.';
-        }
-        message += ' Please reload coc-svelte to restart the TS Server.';
+    const answers = ["Ask again later", "Don't show this message again", "Enable Plugin"];
+    const response = await window.showInformationMessage(
+      "The coc-svelte extension now contains a TypeScript plugin. " +
+        "Enabling it will provide intellisense for Svelte files from TS/JS files. " +
+        "Would you like to enable it? " +
+        "You can always enable/disable it later on through the extension settings.",
+      ...answers,
+    );
 
-        const reload = await window.showInformationMessage(message, 'Reload Window');
-        if (reload) {
-            commands.executeCommand('workbench.action.reloadWindow');
-        }
+    if (response === answers[2]) {
+      workspace.getConfiguration("svelte").update("enable-ts-plugin", true, true);
+    } else if (response === answers[1]) {
+      workspace.getConfiguration("svelte").update("ask-to-enable-ts-plugin", false, true);
     }
-
-    private async askToEnable(enabled: boolean) {
-        const shouldAsk = workspace
-            .getConfiguration('svelte')
-            .get<boolean>('ask-to-enable-ts-plugin');
-        if (enabled || !shouldAsk) {
-            return;
-        }
-
-        const answers = ['Ask again later', "Don't show this message again", 'Enable Plugin'];
-        const response = await window.showInformationMessage(
-            'The coc-svelte extension now contains a TypeScript plugin. ' +
-                'Enabling it will provide intellisense for Svelte files from TS/JS files. ' +
-                'Would you like to enable it? ' +
-                'You can always enable/disable it later on through the extension settings.',
-            ...answers,
-        );
-
-        if (response === answers[2]) {
-            workspace.getConfiguration('svelte').update('enable-ts-plugin', true, true);
-        } else if (response === answers[1]) {
-            workspace.getConfiguration('svelte').update('ask-to-enable-ts-plugin', false, true);
-        }
-    }
+  }
 }
